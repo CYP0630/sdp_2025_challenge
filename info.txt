@@ -1,0 +1,32 @@
+subtask1_train:
+No.Data: 500
+Index(['ID', 'question', 'answer', 'claim', 'reference', 'label',
+       'justification'],
+      dtype='object')
+
+question
+a chatbot enhanced with retrieval capabilities tailored for the education sector
+
+answer
+** Chatbot Enhanced with Retrieval Capabilities Tailored for the Education Sector**
+
+claim
+They are limited in supporting cognitive and affective learning domains and are not 
+effective in handling administrative tasks, making them unsuitable tools in higher education [3].
+
+reference
+[3]: The widespread use of chatbots is a reality and their application in higher education is promising. Understanding higher education usersÃ¢â¬â
+            ¢ expectations for the use of chatbots in education is important for the design and development of new solutions. The present investigation documents how higher education users envision the pedagogical uses of chatbots in higher education, and how experts in the domain of education chatbots perceive the potential benefits and challenges related to the use of chatbots in education. A qualitative inquiry was undertaken based on 22 semi-structured interviews with higher-education students and instructors, and experts from the fields of Artificial Intelligence and educational chatbots. Based on our findings, the envisioned pedagogical uses of chatbots can be categorized in terms of chronological integration into the learning process: prospective, on-going, and retrospective. Under each one of those higher-order categories, specific learning domains can be supported (i.e., cognitive, affective), besides administrative tasks. Benefits and challenges foreseen in the use of pedagogical chatbots are presented and discussed. The findings of this study highlight the manner in which higher-education users envision the use of chatbots in education, with potential implications on the creation of specific pedagogical scenarios, accounting also for the learning context, chatbot technology, and pedagogies that are deemed appropriate in each scenario.
+
+label
+contra
+
+justification
+The claim directly contradicts the reference by stating that "chatbots are limited in supporting cognitive 
+and affective learning domains and are not effective in administrative tasks".
+
+
+subtask2_train:
+No.Data: 500
+
+Only difference is Label
