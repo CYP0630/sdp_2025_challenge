@@ -15,7 +15,7 @@ output_file = "predictions.json"
 system_prompt = (
     "You are an assistant for claim verfication.\n"
     "Given a claim and some reference from academic paper, "
-    "please classify the claim into three labels: entailment, contradiction, or neutral.\n"
+    "please classify the claim into three labels: contradiction, entailment, or unverifiable.\n"
     #"You MUST strictly output your result in the following JSON format (and nothing else).\n"
     #"with the key: \"prediction\".\n"
     "Now it's your turn.\n"
@@ -32,6 +32,7 @@ def parse_model_output(text: str):
     match = re.search(r'Prediction:\s*([^\n]+)', text)
     return {"prediction": match.group(1).strip()} if match else {"prediction": ""}
 
+
 def find_label(x):
     if x.find("entailment")!=-1:
         return "entailment"
@@ -42,6 +43,7 @@ def find_label(x):
     else:
         return "unknown"
 
+
 if __name__ == "__main__":
 
     # data
@@ -49,18 +51,23 @@ if __name__ == "__main__":
     data = pd.read_csv(data_file)
     label_dict = {"entail": "entailment", "contra": "contradiction", "unver": "neutral"}
 
+
     # llm initialize
-    LLM = "llama"
-    if LLM == "llama":
-        #MODEL_NAME = "meta-llama/Llama-3.1-8B"
+    # llm_list = [llama-3.1-8b, llama-3.1-8b-instruct, llama-3.1-70b, qwen-2.5-7b]
+    LLM = "llama-3.1-8b"
+    if LLM == "llama-3.1-8b":
+        MODEL_NAME = "meta-llama/Llama-3.1-8B"
+    elif LLM == "llama-3.1-8b-instruct":
         MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct"
-    elif LLM == "llama70b":
+    elif LLM == "llama-3.1-70b":
         MODEL_NAME = "meta-llama/Llama-3.1-70B"
-    elif LLM == "qwen":
+    elif LLM == "qwen-2.5-7b":
         MODEL_NAME = "Qwen/Qwen2.5-7B"
+        
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     tokenizer.pad_token_id = tokenizer.eos_token_id
     model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, device_map="auto")
+
 
     # running 
     preds = []
@@ -84,12 +91,11 @@ if __name__ == "__main__":
         )
         raw_output     = tokenizer.decode(output[0], skip_special_tokens=True)
         answer  = parse_model_output(raw_output)
-        print(answer)
+        print(answer['prediction'])
         clean_answer = find_label(answer['prediction'])    
 
 
         print(f"[{idx}] → {clean_answer}")
-        #preds.append({ "prediction": answer })
         pred['claim'] = row['claim']
         pred['reference'] = row['reference']
         pred['label'] = label_dict[row['label']]
@@ -97,9 +103,10 @@ if __name__ == "__main__":
         pred['prediction'] = clean_answer
         preds.append(pred)
 
-        if pred['prediction'] == pred['prediction']:
+        if pred['label'] == pred['prediction']:
             num_correct+=1
         k += 1
+        
         
     print("Num_Corrent:", num_correct)
     print("Num_Total:", k)
